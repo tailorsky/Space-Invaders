@@ -12,6 +12,10 @@ public class Enemy : MonoBehaviour
         if (health <= 0)
         {
             GameManager.Instance.AddScore(score);
+
+            EnemyGrid grid = GetComponentInParent<EnemyGrid>();
+            grid.EnemyDestroyed();
+
             Destroy(gameObject);
         }
     }

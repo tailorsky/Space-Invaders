@@ -4,10 +4,10 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+
+    public GameState State { get; private set; } = GameState.Playing;
     public int Score { get; private set; }
-
-    public bool IsGameOver { get; private set; }
-
+    [SerializeField] private ResultView resultView;
     private void Awake()
     {
         if (Instance != null)
@@ -25,26 +25,36 @@ public class GameManager : MonoBehaviour
             Restart();
     }
 
-    public void GameOver()
-    {
-        if (IsGameOver)
-            return;
-
-        IsGameOver = true;
-        Time.timeScale = 0f;
-
-        Debug.Log("GAME OVER");
-    }
-
-    public void Restart()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
     public void AddScore(int amount)
     {
         Score += amount;
-        Debug.Log($"Score: {Score}");
+    }
+
+    public void Win()
+    {
+        if (State != GameState.Playing)
+            return;
+
+        State = GameState.Won;
+        resultView.ShowWin(Score);
+
+        Time.timeScale = 0f;
+    }
+
+    public void Lose()
+    {
+        if (State != GameState.Playing)
+            return;
+
+        State = GameState.Lost;
+        resultView.ShowLose(Score);
+
+        Time.timeScale = 0f;
+    }
+
+    private void Restart()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

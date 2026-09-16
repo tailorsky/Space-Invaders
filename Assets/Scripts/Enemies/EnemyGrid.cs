@@ -13,6 +13,7 @@ public class EnemyGrid : MonoBehaviour
     [SerializeField] private float descentInterval = 3f;
     [SerializeField] private float descentStep = 0.5f;
 
+    private int enemyCount;
     private float timer;
 
     private void Start()
@@ -44,14 +45,24 @@ public class EnemyGrid : MonoBehaviour
             for (int column = 0; column < columns; column++)
             {
                 Vector3 position = startPosition +
-                                    new Vector3(
-                                        column * spacingX,
-                                        -row * spacingY,
-                                        0
-                                    );
+                                   new Vector3(
+                                       column * spacingX,
+                                       -row * spacingY,
+                                       0
+                                   );
 
                 Instantiate(enemyPrefab, position, Quaternion.identity, transform);
+
+                enemyCount++;
             }
         }
+    }
+
+    public void EnemyDestroyed()
+    {
+        enemyCount--;
+
+        if (enemyCount <= 0)
+            GameManager.Instance.Win();
     }
 }
