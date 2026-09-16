@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    public int Score { get; private set; }
 
     public bool IsGameOver { get; private set; }
 
@@ -39,5 +40,11 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void AddScore(int amount)
+    {
+        Score += amount;
+        Debug.Log($"Score: {Score}");
     }
 }
