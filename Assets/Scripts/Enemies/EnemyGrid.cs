@@ -10,9 +10,25 @@ public class EnemyGrid : MonoBehaviour
     [SerializeField] private float spacingX = 1.2f;
     [SerializeField] private float spacingY = 1f;
 
+    [SerializeField] private float descentInterval = 3f;
+    [SerializeField] private float descentStep = 0.5f;
+
+    private float timer;
+
     private void Start()
     {
         CreateGrid();
+    }
+
+    private void Update()
+    {
+        timer += Time.deltaTime;
+
+        if (timer >= descentInterval)
+        {
+            timer = 0f;
+            transform.position += Vector3.down * descentStep;
+        }
     }
 
     private void CreateGrid()
