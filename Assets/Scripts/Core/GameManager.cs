@@ -7,7 +7,11 @@ public class GameManager : MonoBehaviour
 
     public GameState State { get; private set; } = GameState.Playing;
     public int Score { get; private set; }
+
+    public GameConfig Config { get; private set; }
+
     [SerializeField] private ResultView resultView;
+
     private void Awake()
     {
         if (Instance != null)
@@ -17,6 +21,12 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
+        Time.timeScale = 1f;
+    }
+
+    public void Initialize(GameConfig config)
+    {
+        Config = config;
     }
 
     private void Update()
@@ -27,6 +37,9 @@ public class GameManager : MonoBehaviour
 
     public void AddScore(int amount)
     {
+        if (State != GameState.Playing)
+            return;
+
         Score += amount;
     }
 
@@ -36,6 +49,7 @@ public class GameManager : MonoBehaviour
             return;
 
         State = GameState.Won;
+
         resultView.ShowWin(Score);
 
         Time.timeScale = 0f;
@@ -47,6 +61,7 @@ public class GameManager : MonoBehaviour
             return;
 
         State = GameState.Lost;
+
         resultView.ShowLose(Score);
 
         Time.timeScale = 0f;
@@ -55,6 +70,8 @@ public class GameManager : MonoBehaviour
     private void Restart()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(
+            SceneManager.GetActiveScene().buildIndex
+        );
     }
 }

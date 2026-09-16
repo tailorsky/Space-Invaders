@@ -1,29 +1,30 @@
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class EnemyProjectile : MonoBehaviour
 {
     [SerializeField] private GameConfig config;
 
     private void Start()
     {
-        Destroy(gameObject, 3f);
+        Destroy(gameObject, 5f);
     }
 
     private void Update()
     {
         transform.Translate(
-            Vector2.up * config.PlayerBulletSpeed * Time.deltaTime
+            Vector2.down * config.EnemyBulletSpeed * Time.deltaTime
         );
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Enemy enemy = other.GetComponent<Enemy>();
+        PlayerHealth playerHealth =
+            other.GetComponent<PlayerHealth>();
 
-        if (enemy == null)
+        if (playerHealth == null)
             return;
 
-        enemy.TakeDamage(config.PlayerBulletDamage);
+        playerHealth.TakeDamage(1);
 
         Destroy(gameObject);
     }
